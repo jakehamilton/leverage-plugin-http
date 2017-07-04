@@ -13,6 +13,13 @@ Config
 }
 ```
 
+API
+---
+
+| method | arguments | description | example |
+|--------|-----------|-------------|---------|
+| listen | Number    |Have the HTTP server listen on a port | `http.listen(3000)` |
+
 Example
 -------
 
