@@ -9,7 +9,7 @@ Config
 ```js
 {
     path: 'a/b/c', // HTTP path as string
-    method: 'get|post|delete|put|...', // Any express-supported HTTP method
+    method: 'get|post|delete|put|...' // Any express-supported HTTP method
 }
 ```
 
