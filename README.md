@@ -1,7 +1,20 @@
 HTTP for [Leverage](http://github.com/jakehamilton/leverage)!
 =================
 
-This plugin supports the `http` component and middleware types. You can create an HTTP component like so:
+This plugin supports the `http` component and middleware types.
+
+Config
+------
+
+```js
+{
+    path: 'a/b/c', // HTTP path as string
+    method: 'get|post|delete|put|...', // Any express-supported HTTP method
+}
+```
+
+Example
+-------
 
 ```js
 import { Component } from 'leverage-js'
