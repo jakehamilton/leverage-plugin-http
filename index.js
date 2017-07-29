@@ -18,7 +18,7 @@ class HTTP extends Plugin {
 
     http (component) {
         server.extend(instance => {
-            instance.verb(component.__config__.http.method, component.__config__.http.path, component.http)
+            instance.verb(component.__config__.http.method, component.__config__.http.path, component.http.bind(component))
         })
     }
 
