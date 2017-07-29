@@ -1,6 +1,6 @@
 {
   "name": "leverage-plugin-http",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A http plugin for Leverage",
   "main": "index.js",
   "scripts": {
