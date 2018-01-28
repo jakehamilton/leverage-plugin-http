@@ -5,33 +5,18 @@
 </p>
 
 <p align="center">
-  <a href="https://coveralls.io/github/jakehamilton/leverage?branch=next"><img src="https://coveralls.io/repos/github/jakehamilton/leverage/badge.svg?branch=next" alt="Coverage Status"></a>
-  <a href="https://travis-ci.org/jakehamilton/leverage"><img src="https://travis-ci.org/jakehamilton/leverage.svg?branch=next" alt="Build Status"></a>
+  <a href="https://coveralls.io/github/jakehamilton/leverage-plugin-http"><img src="https://coveralls.io/repos/github/jakehamilton/leverage-plugin-http/badge.svg" alt="Coverage Status"></a>
+  <a href="https://travis-ci.org/jakehamilton/leverage-plugin-http"><img src="https://travis-ci.org/jakehamilton/leverage-plugin-http.svg" alt="Build Status"></a>
   <br>
   <a href="http://forthebadge.com"><img src="http://forthebadge.com/images/badges/makes-people-smile.svg" alt="forthebadge"></a>
   <a href="http://forthebadge.com"><img src="http://forthebadge.com/images/badges/built-with-love.svg" alt="forthebadge"></a>
 </p>
 
-What is it?
------------
-
-👩‍💻 A super fast, super customizable library to orchestrate your next application!
-
-What can you use it for?
-------------------------
-
-+ A HTTP server
-+ A chat bot
-+ A realtime websocket server
-+ An IRC server
-+ A MIDI interface
-+ 👩💭 Anything else you can imagine!
-
-Install it
-----------
+HTTP for [`leverage`](https://github.com/jakehamilton/leverage)!
+----------------------------------------------------------------
 
 ```bash
-npm i -S @leverage/core
+npm i -S @leverage/plugin-http
 ```
 
 Hello World
@@ -42,7 +27,7 @@ For a "Hello World", we'll create a simple http server that responds to requests
 First, install the HTTP plugin:
 
 ```bash
-npm i -S @leverage/plugin-http
+npm i -S @leverage/core @leverage/plugin-http
 ```
 
 Now, we will write an HTTP component and load our component and the HTTP plugin:
