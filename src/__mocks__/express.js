@@ -8,6 +8,6 @@ const instance = {
 };
 
 const express = () => instance;
-(express as any).instance = instance;
+express.instance = instance;
 
-export = express;
+module.exports = express;
