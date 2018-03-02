@@ -5,25 +5,28 @@ import nodeBuiltins from 'rollup-plugin-node-builtins';
 import commonjs from 'rollup-plugin-commonjs';
 import uglify from 'rollup-plugin-uglify';
 import pascalCase from 'pascal-case';
+import json from 'rollup-plugin-json';
+import { minify } from 'uglify-es';
 
 const pkg = require('./package');
 
 export default {
-  moduleName: pascalCase(pkg.name),
-  amd: {
-    id: pkg.name,
-  },
-  entry: 'es/index.js',
-  dest: 'dist/bundle.js',
-  format: 'umd',
-  exports: 'named',
-  sourceMap: true,
-  plugins: [
-    sourcemaps(),
-    nodeResolve(),
-    nodeGlobals(),
-    nodeBuiltins(),
-    commonjs(),
-    uglify()
-  ]
+    moduleName: pascalCase(pkg.name),
+    amd: {
+        id: pkg.name,
+    },
+    entry: 'es/index.js',
+    dest: 'dist/bundle.js',
+    format: 'umd',
+    exports: 'named',
+    sourceMap: true,
+    plugins: [
+        sourcemaps(),
+        json(),
+        nodeResolve(),
+        nodeGlobals(),
+        nodeBuiltins(),
+        commonjs(),
+        uglify({}, minify),
+    ],
 };

@@ -1,7 +1,10 @@
 jest.mock('express');
 
 import HTTP, { HTTPComponent, HTTPMiddleware } from '..';
-import { instance } from '../__mocks__/express';
+// tslint:disable-next-line:no-require-imports no-var-requires
+const express = require('../__mocks__/express');
+
+const { instance } = express;
 
 describe('HTTP', () => {
     beforeEach(() => {
@@ -43,12 +46,16 @@ describe('HTTP', () => {
                         method: 'get',
                     },
                     dependencies: {
-                        plugins: ['http'],
+                        plugins: [
+                            'http',
+                        ],
                         services: [],
                     },
                 },
                 http: jest.fn(),
-                plugins: [http] as any,
+                plugins: [
+                    http,
+                ] as any,
                 services: [] as any,
             };
 
@@ -57,7 +64,9 @@ describe('HTTP', () => {
             }).not.toThrow();
 
             expect(instance.get.mock.calls.length).toBe(1);
-            expect(instance.get.mock.calls[0][0]).toBe(component.config.http.path);
+            expect(instance.get.mock.calls[0][0]).toBe(
+                component.config.http.path,
+            );
             expect(typeof instance.get.mock.calls[0][1]).toBe('function');
         });
 
@@ -250,12 +259,16 @@ describe('HTTP', () => {
                 config: {
                     type: 'http',
                     dependencies: {
-                        plugins: ['http'],
+                        plugins: [
+                            'http',
+                        ],
                         services: [],
                     },
                 },
                 http: jest.fn(),
-                plugins: [http] as any,
+                plugins: [
+                    http,
+                ] as any,
                 services: [] as any,
             };
 
@@ -263,8 +276,12 @@ describe('HTTP', () => {
                 http.middleware(middleware);
             }).not.toThrow();
 
-            expect((middleware.http as jest.Mock<{}>).mock.calls.length).toBe(1);
-            expect((middleware.http as jest.Mock<{}>).mock.calls[0][0]).toBe(instance);
+            expect((middleware.http as jest.Mock<{}>).mock.calls.length).toBe(
+                1,
+            );
+            expect((middleware.http as jest.Mock<{}>).mock.calls[0][0]).toBe(
+                instance,
+            );
         });
 
         test('does not accept invalid http middleware', () => {

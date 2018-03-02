@@ -3,12 +3,11 @@ const instance = {
     put: jest.fn(),
     post: jest.fn(),
     delete: jest.fn(),
+
+    use: jest.fn(),
 };
 
 const express = () => instance;
+(express as any).instance = instance;
 
-export default express;
-
-export {
-    instance,
-};
+export = express;
