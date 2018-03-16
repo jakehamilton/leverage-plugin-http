@@ -1,6 +1,6 @@
 {
     "name": "@leverage/plugin-http",
-    "version": "2.0.0",
+    "version": "2.1.0",
     "description": "HTTP plugin for leverage",
     "author": "Jake Hamilton <jehamilton122@gmail.com>",
     "license": "MIT",
