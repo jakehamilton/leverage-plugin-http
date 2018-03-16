@@ -9,10 +9,12 @@ import {
 // tslint:disable-next-line:no-require-imports no-var-requires
 const express = require('express');
 
+export type Path = string | RegExp;
+
 export interface HTTPComponent extends ComponentInstanceWithDependencies {
     config: ComponentConfigWithDependencies & {
         http: {
-            path: string;
+            path: Path | Path[];
             method: string;
         };
     };
@@ -60,11 +62,15 @@ export class HTTP implements PluginUnit {
             );
         }
 
-        if (typeof component.config.http.path !== 'string') {
+        if (
+            typeof component.config.http.path !== 'string' &&
+            !Array.isArray(component.config.http.path) &&
+            typeof component.config.http.path !== 'object'
+        ) {
             throw new Error(
                 // prettier-ignore
                 // tslint:disable-next-line:max-line-length
-                `[HTTP] Expected \`component.config.http.path\` to be a string but got "${typeof component.config.http.path}"`,
+                `[HTTP] Expected \`component.config.http.path\` to be a string, array, or regex but got "${typeof component.config.http.path}"`,
             );
         }
 

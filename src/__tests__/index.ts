@@ -34,7 +34,7 @@ describe('HTTP', () => {
     });
 
     describe('#http', () => {
-        test('installs http components', () => {
+        test('installs http components where path is a string', () => {
             const http = new HTTP();
 
             const component: HTTPComponent = {
@@ -43,6 +43,81 @@ describe('HTTP', () => {
                     type: 'http',
                     http: {
                         path: '/',
+                        method: 'get',
+                    },
+                    dependencies: {
+                        plugins: [
+                            'http',
+                        ],
+                        services: [],
+                    },
+                },
+                http: jest.fn(),
+                plugins: [
+                    http,
+                ] as any,
+                services: [] as any,
+            };
+
+            expect(() => {
+                http.http(component);
+            }).not.toThrow();
+
+            expect(instance.get.mock.calls.length).toBe(1);
+            expect(instance.get.mock.calls[0][0]).toBe(
+                component.config.http.path,
+            );
+            expect(typeof instance.get.mock.calls[0][1]).toBe('function');
+        });
+
+        test('installs http components where path is a regex', () => {
+            const http = new HTTP();
+
+            const component: HTTPComponent = {
+                is: 'component',
+                config: {
+                    type: 'http',
+                    http: {
+                        path: /\//,
+                        method: 'get',
+                    },
+                    dependencies: {
+                        plugins: [
+                            'http',
+                        ],
+                        services: [],
+                    },
+                },
+                http: jest.fn(),
+                plugins: [
+                    http,
+                ] as any,
+                services: [] as any,
+            };
+
+            expect(() => {
+                http.http(component);
+            }).not.toThrow();
+
+            expect(instance.get.mock.calls.length).toBe(1);
+            expect(instance.get.mock.calls[0][0]).toBe(
+                component.config.http.path,
+            );
+            expect(typeof instance.get.mock.calls[0][1]).toBe('function');
+        });
+
+        test('installs http components where path is an array', () => {
+            const http = new HTTP();
+
+            const component: HTTPComponent = {
+                is: 'component',
+                config: {
+                    type: 'http',
+                    http: {
+                        path: [
+                            '/',
+                            /x/,
+                        ],
                         method: 'get',
                     },
                     dependencies: {
