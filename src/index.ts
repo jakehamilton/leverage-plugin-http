@@ -1,20 +1,19 @@
 import {
+    Plugin,
     PluginUnit,
-    ComponentInstanceWithDependencies,
-    MiddlewareInstanceWithDependencies,
-    ComponentConfigWithDependencies,
+    ComponentInstance,
+    MiddlewareInstance,
+    ComponentConfigInstance,
 } from '@leverage/core';
 
-// Import via `require` because es6 doesn't allow `import x = require('x')`
-// tslint:disable-next-line:no-require-imports no-var-requires
-const express = require('express');
+import * as express from 'express';
 
-export type Path = string | RegExp;
+export type Route = string | RegExp;
 
-export interface HTTPComponent extends ComponentInstanceWithDependencies {
-    config: ComponentConfigWithDependencies & {
+export interface HTTPComponent extends ComponentInstance {
+    config: ComponentConfigInstance & {
         http: {
-            path: Path | Path[];
+            path: Route | Route[];
             method: string;
         };
     };
@@ -22,22 +21,13 @@ export interface HTTPComponent extends ComponentInstanceWithDependencies {
     http: (request: Express.Request, response: Express.Response) => void;
 }
 
-export interface HTTPMiddleware extends MiddlewareInstanceWithDependencies {
+export interface HTTPMiddleware extends MiddlewareInstance {
     http: (app: Express.Application) => void;
 }
 
-export class HTTP implements PluginUnit {
-    // well this isn't very good :(
-    is: 'plugin' = 'plugin';
-    config = {
-        type: 'http',
-    };
-
-    app: Express.Application;
-
-    constructor () {
-        this.app = express();
-    }
+export class HTTP extends Plugin implements PluginUnit {
+    type = 'http';
+    app = express();
 
     http (component: HTTPComponent) {
         /*
@@ -107,10 +97,10 @@ export class HTTP implements PluginUnit {
         const method = component.config.http.method;
         const callback = component.http;
 
-        this.app[method](path, callback.bind(component));
+        (this.app as any)[method](path, callback.bind(component));
     }
 
-    middleware (middleware: HTTPMiddleware) {
+    middleware (middleware: MiddlewareInstance) {
         if (!middleware.http) {
             throw new Error(
                 `[HTTP] Expected \`middleware.http()\` to exist on http middleware`,
@@ -123,7 +113,7 @@ export class HTTP implements PluginUnit {
             );
         }
 
-        middleware.http(this.app);
+        (middleware as HTTPMiddleware).http(this.app);
     }
 
     listen (port: number) {

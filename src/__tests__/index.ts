@@ -1,8 +1,7 @@
-jest.mock('express');
-
 import HTTP, { HTTPComponent, HTTPMiddleware } from '..';
-// tslint:disable-next-line:no-require-imports no-var-requires
-const express = require('../__mocks__/express');
+import * as express from '../__mocks__/express';
+
+jest.mock('express');
 
 const { instance } = express;
 
@@ -39,8 +38,8 @@ describe('HTTP', () => {
 
             const component: HTTPComponent = {
                 is: 'component',
+                type: 'http',
                 config: {
-                    type: 'http',
                     http: {
                         path: '/',
                         method: 'get',
@@ -75,8 +74,8 @@ describe('HTTP', () => {
 
             const component: HTTPComponent = {
                 is: 'component',
+                type: 'http',
                 config: {
-                    type: 'http',
                     http: {
                         path: /\//,
                         method: 'get',
@@ -111,8 +110,8 @@ describe('HTTP', () => {
 
             const component: HTTPComponent = {
                 is: 'component',
+                type: 'http',
                 config: {
-                    type: 'http',
                     http: {
                         path: [
                             '/',
@@ -331,8 +330,8 @@ describe('HTTP', () => {
 
             const middleware: HTTPMiddleware = {
                 is: 'middleware',
+                type: 'http',
                 config: {
-                    type: 'http',
                     dependencies: {
                         plugins: [
                             'http',

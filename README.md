@@ -40,8 +40,8 @@ const manager = new Manager();
 
 const route = {
     is: 'component',
+    type: 'http',
     config: {
-        type: 'http',
         http: {
             path: '/',
             method: 'get'
@@ -66,8 +66,3 @@ Check out [the wiki](https://github.com/jakehamilton/leverage/wiki)!
 Learn from example applications:
 
 + *coming soon*
-
-Roadmap
--------
-
-Most (if not all) roadmap items are tracked on [the project board](https://github.com/jakehamilton/leverage/projects/2).

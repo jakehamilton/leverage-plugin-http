@@ -1,0 +1,25 @@
+{
+    "clearMocks": true,
+    "coverageDirectory": "../.coverage",
+    "collectCoverageFrom": [
+        "**/*.ts"
+    ],
+    "mapCoverage": true,
+    "moduleFileExtensions": [
+        "js",
+        "json",
+        "jsx",
+        "ts",
+        "tsx"
+    ],
+    "resetMocks": true,
+    "rootDir": "src",
+    "testEnvironment": "node",
+    "testMatch": [
+        "**/__tests__/**",
+        "**/*.spec.*"
+    ],
+    "transform": {
+        "^.+.tsx?$": "<rootDir>/../node_modules/ts-jest/preprocessor.js"
+    }
+}
