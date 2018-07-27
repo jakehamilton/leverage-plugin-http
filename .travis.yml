@@ -9,4 +9,4 @@ cache:
 
 after_success:
   - npm i -g coveralls
-  - cat coverage/lcov.info | coveralls
+  - cat .coverage/lcov.info | coveralls
