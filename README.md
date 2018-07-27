@@ -66,7 +66,7 @@ export interface HTTPMiddleware extends MiddlewareInstance {
 ## Example
 
 ```typescript
-import { manager } from '@leverage/core';
+import { Manager } from '@leverage/core';
 import {
     HTTP,
     HTTPComponent,
@@ -74,6 +74,7 @@ import {
 } from '@leverage/plugin-http';
 
 const http = new HTTP();
+const manager = new Manager();
 
 const component: HTTPComponent = {
     is: 'component',
