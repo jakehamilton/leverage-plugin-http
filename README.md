@@ -1,69 +1,105 @@
-<br>
+# HTTP for [Leverage](http://github.com/jakehamilton/leverage)!
+
+This is a plugin for Leverage that handles the `http` type of components.
 
 <p align="center">
-    <img src="https://raw.githubusercontent.com/jakehamilton/leverage/next/.md-assets/logo.png" width="120" height="120" alt="Leverage Logo">
+    <img src="https://img.shields.io/badge/leverage-plugin-blue.svg?style=for-the-badge">
+    <img src="https://img.shields.io/npm/v/@leverage/plugin-http.svg?style=for-the-badge">
+    <img src="https://img.shields.io/travis/jakehamilton/leverage-plugin-http.svg?style=for-the-badge">
+    <img src="https://img.shields.io/coveralls/github/jakehamilton/leverage-plugin-http.svg?style=for-the-badge">
+    <img src="https://img.shields.io/badge/semantic_release_🚀📦-enabled-brightgreen.svg?style=for-the-badge">
 </p>
 
-<p align="center">
-  <a href="https://coveralls.io/github/jakehamilton/leverage-plugin-http"><img src="https://coveralls.io/repos/github/jakehamilton/leverage-plugin-http/badge.svg" alt="Coverage Status"></a>
-  <a href="https://travis-ci.org/jakehamilton/leverage-plugin-http"><img src="https://travis-ci.org/jakehamilton/leverage-plugin-http.svg" alt="Build Status"></a>
-  <br>
-  <a href="http://forthebadge.com"><img src="http://forthebadge.com/images/badges/makes-people-smile.svg" alt="forthebadge"></a>
-  <a href="http://forthebadge.com"><img src="http://forthebadge.com/images/badges/built-with-love.svg" alt="forthebadge"></a>
-</p>
+## HTTP Component
 
-HTTP for [`leverage`](https://github.com/jakehamilton/leverage)!
-----------------------------------------------------------------
+A HTTP Component has the following interface:
 
-```bash
-npm i -S @leverage/plugin-http
+```typescript
+import {
+    ComponentUnit,
+    ComponentInstance,
+    ComponentConfig,
+    ComponentConfigInstance,
+} from '@leverage/core';
+
+import { Express } from 'express';
+
+export type Route = string | RegExp;
+
+type HTTPCallback = (
+    request: Express.Request,
+    response: Express.Response,
+) => void;
+
+interface HTTPComponentConfig {
+    http: {
+        path: Route | Route[];
+        method: string;
+    };
+}
+
+export interface HTTPComponent extends ComponentUnit {
+    config: ComponentConfig & HTTPComponentConfig;
+    http: HTTPCallback;
+}
+
+export interface HTTPComponentInstance extends ComponentInstance {
+    config: ComponentConfigInstance & HTTPComponentConfig;
+    http: HTTPCallback;
+}
 ```
 
-Hello World
------------
+## HTTP Middleware
 
-For a "Hello World", we'll create a simple http server that responds to requests with a "Hello World".
+A HTTP Middleware has the following interface:
 
-First, install the HTTP plugin:
+```typescript
+import * as http from 'http';
+import { Express } from 'express';
+import { MiddlewareInstance } from '@leverage/core';
 
-```bash
-npm i -S @leverage/core @leverage/plugin-http
+export interface HTTPMiddleware extends MiddlewareInstance {
+    http: (options: { app: Express.Application; server: http.Server }) => void;
+}
 ```
 
-Now, we will write an HTTP component and load our component and the HTTP plugin:
+## Example
 
-```js
-import { Manager } from '@leverage/core';
-import HTTP from '@leverage/plugin-http';
+```typescript
+import { manager } from '@leverage/core';
+import {
+    HTTP,
+    HTTPComponent,
+    HTTPMiddleware,
+} from '@leverage/plugin-http';
 
-const manager = new Manager();
 const http = new HTTP();
 
-const route = {
+const component: HTTPComponent = {
     is: 'component',
     type: 'http',
     config: {
         http: {
             path: '/',
-            method: 'get'
-        }
+            method: 'get',
+        },
     },
+    http (req, res) {
+        res.send('Hello, World!');
+    },
+};
 
-    http (request, response) {
-        response.send('Hello World');
-    }
-}
+const middleware: HTTPMiddleware = {
+    is: 'middleware',
+    type: 'http',
+    http ({ app }) {
+        app.get('/middleware', (req, res) => {
+            res.send('Hello, Custom Middleware!');
+        });
+    },
+};
 
-manager.add(http, route);
+manager.add(http, component, middleware);
 
 http.listen(8080);
 ```
-
-Want To Dig In Deeper?
-----------------------
-
-Check out [the wiki](https://github.com/jakehamilton/leverage/wiki)!
-
-Learn from example applications:
-
-+ *coming soon*
