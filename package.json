@@ -6,7 +6,6 @@
     "license": "MIT",
     "repository": "git+https://github.com/jakehamilton/leverage-plugin-http",
     "main": "dist/lib.js",
-    "browser": "dist/lib.browser.js",
     "types": "dist/lib.d.ts",
     "scripts": {
         "commit": "git-cz",

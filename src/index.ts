@@ -3,33 +3,47 @@ import {
     PluginUnit,
     ComponentInstance,
     MiddlewareInstance,
+    ComponentUnit,
+    ComponentConfig,
     ComponentConfigInstance,
 } from '@leverage/core';
-
+import * as http from 'http';
 import * as express from 'express';
 
 export type Route = string | RegExp;
 
-export interface HTTPComponent extends ComponentInstance {
-    config: ComponentConfigInstance & {
-        http: {
-            path: Route | Route[];
-            method: string;
-        };
-    };
+type HTTPCallback = (
+    request: Express.Request,
+    response: Express.Response,
+) => void;
 
-    http: (request: Express.Request, response: Express.Response) => void;
+interface HTTPComponentConfig {
+    http: {
+        path: Route | Route[];
+        method: string;
+    };
+}
+
+export interface HTTPComponent extends ComponentUnit {
+    config: ComponentConfig & HTTPComponentConfig;
+    http: HTTPCallback;
+}
+
+export interface HTTPComponentInstance extends ComponentInstance {
+    config: ComponentConfigInstance & HTTPComponentConfig;
+    http: HTTPCallback;
 }
 
 export interface HTTPMiddleware extends MiddlewareInstance {
-    http: (app: Express.Application) => void;
+    http: (options: { app: Express.Application; server: http.Server }) => void;
 }
 
 export class HTTP extends Plugin implements PluginUnit {
     type = 'http';
     app = express();
+    server = new http.Server(this.app);
 
-    http (component: HTTPComponent) {
+    http (component: HTTPComponentInstance) {
         /*
          * Validate component config
          */
@@ -113,7 +127,10 @@ export class HTTP extends Plugin implements PluginUnit {
             );
         }
 
-        (middleware as HTTPMiddleware).http(this.app);
+        (middleware as HTTPMiddleware).http({
+            app: this.app,
+            server: this.server,
+        });
     }
 
     listen (port: number) {
@@ -127,8 +144,7 @@ export class HTTP extends Plugin implements PluginUnit {
             );
         }
 
-        // Typings seem to think that `app.listen` doesn't exist...
-        (this.app as any).listen(port);
+        this.server.listen(port);
     }
 }
 

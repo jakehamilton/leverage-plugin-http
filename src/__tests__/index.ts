@@ -1,16 +1,19 @@
-import HTTP, { HTTPComponent, HTTPMiddleware } from '..';
-import * as express from '../__mocks__/express';
+import HTTP, { HTTPComponent, HTTPMiddleware, HTTPComponentInstance } from '..';
+import * as httpMock from '../__mocks__/http';
+import * as expressMock from '../__mocks__/express';
 
+jest.mock('http');
 jest.mock('express');
 
-const { instance } = express;
+const { instance: httpInstance } = httpMock;
+const { instance: expressInstance } = expressMock;
 
 describe('HTTP', () => {
     beforeEach(() => {
-        instance.get.mockReset();
-        instance.put.mockReset();
-        instance.post.mockReset();
-        instance.delete.mockReset();
+        expressInstance.get.mockReset();
+        expressInstance.put.mockReset();
+        expressInstance.post.mockReset();
+        expressInstance.delete.mockReset();
     });
 
     describe('#constructor', () => {
@@ -27,7 +30,7 @@ describe('HTTP', () => {
 
                 expect(http.app).not.toBeUndefined();
 
-                expect(http.app).toBe(instance);
+                expect(http.app).toBe(expressInstance);
             }).not.toThrow();
         });
     });
@@ -36,7 +39,7 @@ describe('HTTP', () => {
         test('installs http components where path is a string', () => {
             const http = new HTTP();
 
-            const component: HTTPComponent = {
+            const component: HTTPComponentInstance = {
                 is: 'component',
                 type: 'http',
                 config: {
@@ -62,17 +65,19 @@ describe('HTTP', () => {
                 http.http(component);
             }).not.toThrow();
 
-            expect(instance.get.mock.calls.length).toBe(1);
-            expect(instance.get.mock.calls[0][0]).toBe(
+            expect(expressInstance.get.mock.calls.length).toBe(1);
+            expect(expressInstance.get.mock.calls[0][0]).toBe(
                 component.config.http.path,
             );
-            expect(typeof instance.get.mock.calls[0][1]).toBe('function');
+            expect(typeof expressInstance.get.mock.calls[0][1]).toBe(
+                'function',
+            );
         });
 
         test('installs http components where path is a regex', () => {
             const http = new HTTP();
 
-            const component: HTTPComponent = {
+            const component: HTTPComponentInstance = {
                 is: 'component',
                 type: 'http',
                 config: {
@@ -98,17 +103,19 @@ describe('HTTP', () => {
                 http.http(component);
             }).not.toThrow();
 
-            expect(instance.get.mock.calls.length).toBe(1);
-            expect(instance.get.mock.calls[0][0]).toBe(
+            expect(expressInstance.get.mock.calls.length).toBe(1);
+            expect(expressInstance.get.mock.calls[0][0]).toBe(
                 component.config.http.path,
             );
-            expect(typeof instance.get.mock.calls[0][1]).toBe('function');
+            expect(typeof expressInstance.get.mock.calls[0][1]).toBe(
+                'function',
+            );
         });
 
         test('installs http components where path is an array', () => {
             const http = new HTTP();
 
-            const component: HTTPComponent = {
+            const component: HTTPComponentInstance = {
                 is: 'component',
                 type: 'http',
                 config: {
@@ -137,11 +144,13 @@ describe('HTTP', () => {
                 http.http(component);
             }).not.toThrow();
 
-            expect(instance.get.mock.calls.length).toBe(1);
-            expect(instance.get.mock.calls[0][0]).toBe(
+            expect(expressInstance.get.mock.calls.length).toBe(1);
+            expect(expressInstance.get.mock.calls[0][0]).toBe(
                 component.config.http.path,
             );
-            expect(typeof instance.get.mock.calls[0][1]).toBe('function');
+            expect(typeof expressInstance.get.mock.calls[0][1]).toBe(
+                'function',
+            );
         });
 
         test('does not accept invalid components', () => {
@@ -353,9 +362,12 @@ describe('HTTP', () => {
             expect((middleware.http as jest.Mock<{}>).mock.calls.length).toBe(
                 1,
             );
-            expect((middleware.http as jest.Mock<{}>).mock.calls[0][0]).toBe(
-                instance,
-            );
+            expect(
+                (middleware.http as jest.Mock<{}>).mock.calls[0][0].app,
+            ).toEqual(expressInstance);
+            expect(
+                (middleware.http as jest.Mock<{}>).mock.calls[0][0].server,
+            ).toBeTruthy();
         });
 
         test('does not accept invalid http middleware', () => {
